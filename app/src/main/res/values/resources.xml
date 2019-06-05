@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="blood_types">
+        <item>A+</item>
+        <item>A-</item>
+        <item>B+</item>
+        <item>B-</item>
+        <item>O+</item>
+        <item>O-</item>
+        <item>AB+</item>
+        <item>AB-</item>
+    </string-array>
+
+    <string-array name="department">
+        <item>Accident and emergency (الحوادث و الطوارئ) </item>
+        <item>Cardiology (قسم القلب )</item>
+        <item>Critical care (العنايه الصحيه )</item>
+        <item>Diagnostic imaging (الاشعه )</item>
+        <item>Ear nose and throat(انف واذن وحنجره )</item>
+        <item>Gastroenterology (الجهاز الهضمى )</item>
+        <item>General surgery (الجراحه)</item>
+        <item>Obstetrics and gynaecology units ( قسم النساءوالتوليد )</item>
+        <item>Neonatal unit (الحضانه)</item>
+        <item>Neurology (الاعصاب)</item>
+        <item>Physiotherapy (العلاج الطبيعى )</item>
+        <item>Oncology (قسم الاورام)</item>
+        <item>Ophthalmology (قسم العيون)</item>
+        <item>Orthopaedics (قسم العظام)</item>
+        <item>Radiotherapy (العلاج بالاشعاع)</item>
+        <item>Sexual health (الصحه الجنسيه)</item>
+        <item>Urology (المسالك البوليه)</item>
+    </string-array>
+
+</resources>
+
+
