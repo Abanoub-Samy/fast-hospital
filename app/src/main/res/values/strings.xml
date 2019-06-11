@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Maps Activty </string>
+    <string name="app_name">hospital </string>
     <string name="title_activity_maps">Map</string>
     <string name="google_api">AIzaSyCrXaJ3IO6roez0I0Miy1tpfl3LugRqazw</string>
     <string name="title_activity_main2">Fast Hospital</string>

@@ -19,17 +19,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".Medicine">
+        <activity android:name=".Medicine"
+            android:label="Medicine search">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NearestHospitalActivity" />
         </activity>
 
-        <activity android:name=".Room" >
+        <activity android:name=".Room"
+            android:label="empty room">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NearestHospitalActivity" />
         </activity>
 
-        <activity android:name=".BloodActivity" >
+        <activity android:name=".BloodActivity"
+            android:label="Blood search">
             <meta-data android:name="android.support.PARENT_ACTIVITY"
                 android:value=".NearestHospitalActivity" />
         </activity>
@@ -60,7 +63,10 @@
 
         <activity
             android:name=".MapsActivity"
-            android:label="@string/title_activity_maps" />
+            android:label="nearest search" >
+            <meta-data android:name="android.support.PARENT_ACTIVITY"
+                android:value=".NearestHospitalActivity" />
+        </activity>
 
     </application>
 
