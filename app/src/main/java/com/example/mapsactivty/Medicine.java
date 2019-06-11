@@ -1,8 +1,14 @@
 package com.example.mapsactivty;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,6 +19,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.mapsactivty.internet.HttpHandler;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,17 +43,30 @@ public class Medicine extends AppCompatActivity {
     private String TAG = Medicine.class.getSimpleName();
     ArrayList<HashMap<String, String>> pokemonList;
 
-
+    ArrayList<String> id_hos = new ArrayList<>();
     ArrayList<String> name_hos = new ArrayList<>();
-    ArrayList<String> lat = new ArrayList<>();
-    ArrayList<String> lon = new ArrayList<>();
-    ArrayList<String> phone = new ArrayList<>();
+    ArrayList<String> lat_hos = new ArrayList<>();
+    ArrayList<String> lon_hos = new ArrayList<>();
+    ArrayList<String> phone_hos = new ArrayList<>();
     ArrayList<String> medicine = new ArrayList<>();
     ArrayList<String> blood = new ArrayList<>();
-
-
+    ArrayList<String> room = new ArrayList<>();
+    ArrayList<Integer> array = new ArrayList<>();
 
     String text;
+
+    private GoogleMap map;
+
+
+    private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
+    private static final String COURSE_LOCATION = Manifest.permission.ACCESS_COARSE_LOCATION;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1234;
+    private static final float DEFAULT_ZOOM = 15f;
+
+    //vars
+    private Boolean mLocationPermissionsGranted = false;
+    private FusedLocationProviderClient mFusedLocationProviderClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,36 +80,39 @@ public class Medicine extends AppCompatActivity {
 
         search = findViewById(R.id.search);
         editText = findViewById(R.id.editText1);
+        new Getsearch().execute();
 
 
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                text = editText.getText().toString();
-                new Getsearch().execute();
-
-                array(name_hos);
-//                    for(int x=0 ; x < string.size();x++){
-//                        Toast.makeText(Medicine.this, string.get(x), Toast.LENGTH_SHORT).show();
-//                        //Toast.makeText(Medicine.this, string.size(), Toast.LENGTH_SHORT).show();
+//        search.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                text = editText.getText().toString();
 //
 //
+//                //array(name_hos);
+//
+//
+//                    for(int x=0 ; x < medicine.size();x++){
+//                        //Log.e(TAG, "done "+medicine.get(x));
+//                        if(medicine.get(x).contains(text)){
+//                           array.add(x);
+//                           Log.e(TAG, name_hos.get(x));
+//                        }
+//
+//                        }
+//
+//                    for(int w=0;w<array.size();w++){
+//                        name_hos.get(array.get(w));
+//                        //Log.e(TAG, name_hos.get(w));
+//                        //Toast.makeText(Medicine.this, "is : "+ name_hos.get(w) , Toast.LENGTH_SHORT).show();
 //                    }
-
-
-
-
-            }
-        });
-    }
-    public void array (ArrayList arrayList){
-        for(int x=0 ; x < arrayList.size();x++){
-            Toast.makeText(Medicine.this,  ""+arrayList.get(x), Toast.LENGTH_SHORT).show();
-            //Toast.makeText(Medicine.this, string.size(), Toast.LENGTH_SHORT).show();
-
-
-        }
-
+//
+//
+//
+//
+//            }
+//        });
     }
 
     @Override
@@ -96,6 +123,32 @@ public class Medicine extends AppCompatActivity {
             NavUtils.navigateUpFromSameTask(this);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void go(View view) {
+
+        text = editText.getText().toString();
+
+
+        for (int x = 0; x < medicine.size(); x++) {
+            //Log.e(TAG, "done "+medicine.get(x));
+            if (medicine.get(x).contains(text)) {
+                array.add(x);
+                Log.e(TAG, name_hos.get(x));
+                Log.e(TAG, id_hos.get(x));
+                Log.e(TAG, medicine.get(x));
+            }
+
+        }
+
+        for (int w = 0; w < array.size(); w++) {
+            name_hos.get(array.get(w));
+            //Log.e(TAG, name_hos.get(w));
+            //Toast.makeText(Medicine.this, "is : "+ name_hos.get(w) , Toast.LENGTH_SHORT).show();
+        }
+        getLocationPermission();
+
+
     }
 
 
@@ -127,23 +180,29 @@ public class Medicine extends AppCompatActivity {
                     for (int i = 0; i < pokemons.length(); i++) {
                         //TODO: get the JSONObject
                         JSONObject c = pokemons.getJSONObject(i);
-                        String name = c.getString("name");
                         String id = c.getString("id");
-                        String candy = c.getString("weight");
-                        if(candy.contains("30.0")){
-                            name_hos.add(z,name);
-                            z++;
-                        }
+                        String name = c.getString("name");
+//                        String lat = c.getString("");
+//                        String lon = c.getString("");
+//                        String phone = c.getString("");
+                        String med = c.getString("weight");
+
+                        name_hos.add(z, name);
+//                            lat_hos.add(z,lat);
+//                            lon_hos.add(z,lon);
+//                            phone_hos.add(z,phone);
+                        id_hos.add(z, id);
+                        medicine.add(z, med);
+                        z++;
+                        //Log.e(TAG, "Json parsing error: "+medicine.get(i));
+
 
 //                             HashMap<String, String> pokemon = new HashMap<>();
-                            // add each child node to HashMap key => value
+                        // add each child node to HashMap key => value
 //                            pokemon.put("name", name);
 //
-                            // adding a pokemon to our pokemon list
+                        // adding a pokemon to our pokemon list
 //                            pokemonList.add(pokemon);
-
-
-
 
 
                         // tmp hash map for a single pokemon
@@ -181,7 +240,7 @@ public class Medicine extends AppCompatActivity {
         }
 
         private URL createUrl(String stringUrl) {
-            URL url ;
+            URL url;
             try {
                 url = new URL(stringUrl);
             } catch (MalformedURLException exception) {
@@ -191,7 +250,60 @@ public class Medicine extends AppCompatActivity {
         }
 
 
+    }
 
+    private void getDeviceLocation() {
+        Log.d(TAG, "getDeviceLocation: getting the devices current location");
+
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+
+        try {
+            if (mLocationPermissionsGranted) {
+
+                final Task location = mFusedLocationProviderClient.getLastLocation();
+                location.addOnCompleteListener(new OnCompleteListener() {
+                    @Override
+                    public void onComplete(@NonNull Task task) {
+                        if (task.isSuccessful()) {
+                            Log.d(TAG, "onComplete: found location!");
+                            Location currentLocation = (Location) task.getResult();
+
+                            Log.d(TAG, "lat : " + currentLocation.getLatitude() + "lon : " + currentLocation.getLongitude());
+
+                        } else {
+                            Log.d(TAG, "onComplete: current location is null");
+                            //Toast.makeText(NearestHospitalActivity.this, "unable to get current location", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        } catch (SecurityException e) {
+            Log.e(TAG, "getDeviceLocation: SecurityException: " + e.getMessage());
+        }
+    }
+
+
+    private void getLocationPermission() {
+        Log.d(TAG, "getLocationPermission: getting location permissions");
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION};
+
+        if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(this.getApplicationContext(),
+                    COURSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                mLocationPermissionsGranted = true;
+                getDeviceLocation();
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        permissions,
+                        LOCATION_PERMISSION_REQUEST_CODE);
+            }
+        } else {
+            ActivityCompat.requestPermissions(this,
+                    permissions,
+                    LOCATION_PERMISSION_REQUEST_CODE);
+        }
     }
 
 }
