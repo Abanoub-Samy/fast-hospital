@@ -1,6 +1,7 @@
 package com.example.mapsactivty;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -48,7 +49,7 @@ public class Medicine extends AppCompatActivity {
     Location current = new Location("current");
     Location used = new Location("used");
     Location real_used = new Location("real_used");
-    float result000 = 1000000000 ;
+    double result000 = 1000000000 ;
 
 
     private static final String FINE_LOCATION = Manifest.permission.ACCESS_FINE_LOCATION;
@@ -85,39 +86,9 @@ public class Medicine extends AppCompatActivity {
 
         search = findViewById(R.id.search);
         editText = findViewById(R.id.editText1);
-        //new Getsearch().execute();
+        getLocationPermission();
 
 
-//        search.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//                text = editText.getText().toString();
-//
-//
-//                //array(name_hos);
-//
-//
-//                    for(int x=0 ; x < medicine.size();x++){
-//                        //Log.e(TAG, "done "+medicine.get(x));
-//                        if(medicine.get(x).contains(text)){
-//                           array.add(x);
-//                           Log.e(TAG, name_hos.get(x));
-//                        }
-//
-//                        }
-//
-//                    for(int w=0;w<array.size();w++){
-//                        name_hos.get(array.get(w));
-//                        //Log.e(TAG, name_hos.get(w));
-//                        //Toast.makeText(Medicine.this, "is : "+ name_hos.get(w) , Toast.LENGTH_SHORT).show();
-//                    }
-//
-//
-//
-//
-//            }
-//        });
     }
 
     @Override
@@ -131,7 +102,7 @@ public class Medicine extends AppCompatActivity {
     }
 
     public void go(View view) {
-        getLocationPermission();
+
 
 
         text = editText.getText().toString();
@@ -146,14 +117,28 @@ public class Medicine extends AppCompatActivity {
                 Log.e(TAG, "weight is " +medicine.get(x));
 //                used.setLatitude(Double.parseDouble(lat_hos.get(x)));
 //                used.setLongitude(Double.parseDouble(lon_hos.get(x)));
-//               float result=current.distanceTo(used);
+//               double result=current.distanceTo(used);
 //                if(result<result000){
 //                    real_used.setLatitude(Double.parseDouble(lat_hos.get(x)));
 //                    real_used.setLongitude(Double.parseDouble(lon_hos.get(x)));
 //                    result000=result;
 //                }
+
+
             }
         }
+        String c1 = String.valueOf(current.getLatitude());
+        String c2 = String.valueOf(current.getLongitude());
+
+        String r1 = "30.560251";
+        String r2 = "31.014352";
+
+        Intent intent = new Intent(getBaseContext(),MapsActivity.class);
+        intent.putExtra("current_lat",c1);
+        intent.putExtra("current_lon",c2);
+        intent.putExtra("real_lat",r1);
+        intent.putExtra("real_lon",r2);
+        startActivity(intent);
     }
 
 
